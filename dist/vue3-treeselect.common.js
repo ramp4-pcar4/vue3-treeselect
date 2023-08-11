@@ -5833,34 +5833,13 @@ var instanceId = 0;
       return $menu && $menu.nodeName !== '#comment' ? $menu : null;
     },
     setCurrentHighlightedOption: function setCurrentHighlightedOption(node) {
-      var _this14 = this;
-
-      var scroll = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
       var prev = this.menu.current;
 
       if (prev != null && prev in this.forest.nodeMap) {
         this.forest.nodeMap[prev].isHighlighted = false;
       }
 
-      this.menu.current = node.id;
-      node.isHighlighted = true;
-
-      if (this.menu.isOpen && scroll) {
-        var scrollToOption = function scrollToOption() {
-          var $menu = _this14.getMenu();
-
-          var $option = $menu.querySelector(".vue-treeselect__option[data-id=\"".concat(node.id, "\"]"));
-          if ($option) scrollIntoView($menu, $option);
-        }; // In case `openMenu()` is just called and the menu is not rendered yet.
-
-
-        if (this.getMenu()) {
-          scrollToOption();
-        } else {
-          // istanbul ignore next
-          this.$nextTick(scrollToOption);
-        }
-      }
+      this.menu.current = node?.id;
     },
     resetHighlightedOptionWhenNecessary: function resetHighlightedOptionWhenNecessary() {
       var forceReset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
