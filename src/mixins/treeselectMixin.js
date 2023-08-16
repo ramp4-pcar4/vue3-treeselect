@@ -987,6 +987,7 @@ export default {
         isLeaf: true,
         isBranch: false,
         isDisabled: false,
+        childrenIgnoreDisabled: false,
         isNew: false,
         index: [ -1 ],
         level: 0,
@@ -1537,7 +1538,8 @@ export default {
           const level = isRootNode ? 0 : parentNode.level + 1
           const isBranch = Array.isArray(children) || children === null
           const isLeaf = !isBranch
-          const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled)
+          const childrenIgnoreDisabled = node.childrenIgnoreDisabled
+          const isDisabled = !!node.isDisabled || (!this.flat && !isRootNode && parentNode.isDisabled && !parentNode.childrenIgnoreDisabled)          
           const isNew = !!node.isNew
           const lowerCased = this.matchKeys.reduce((prev, key) => ({
             ...prev,
@@ -1560,6 +1562,7 @@ export default {
           normalized.parentNode = parentNode;
           normalized.lowerCased = lowerCased;
           normalized.nestedSearchLabel = nestedSearchLabel;
+          normalized.childrenIgnoreDisabled = childrenIgnoreDisabled;
           normalized.isDisabled = isDisabled;
           normalized.isNew = isNew;
           normalized.isMatched = false;
@@ -1897,7 +1900,7 @@ export default {
       if (isFullyChecked) {
         let curr = node
         while ((curr = curr.parentNode) !== NO_PARENT_NODE) {
-          if (curr.children.every(this.isSelected)) this.addValue(curr)
+          if (curr.children.every(this.isSelected) && !curr.childrenIgnoreDisabled) this.addValue(curr)
           else break
         }
       }
