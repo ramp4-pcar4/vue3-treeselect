@@ -150,38 +150,9 @@
           }
           break
         }
-        case KEY_CODES.END: {
-          evt.preventDefault()
-          instance.highlightLastOption()
-          break
-        }
-        case KEY_CODES.HOME: {
-          evt.preventDefault()
-          instance.highlightFirstOption()
-          break
-        }
-        case KEY_CODES.ARROW_LEFT: {
-          const current = instance.getNode(instance.menu.current)
-          if (current.isBranch && instance.shouldExpand(current)) {
-            evt.preventDefault()
-            instance.toggleExpanded(current)
-          } else if (!current.isRootNode && (current.isLeaf || (current.isBranch && !(instance.shouldExpand(current))))) {
-            evt.preventDefault()
-            instance.setCurrentHighlightedOption(current.parentNode)
-          }
-          break
-        }
         case KEY_CODES.ARROW_UP: {
           evt.preventDefault()
           instance.highlightPrevOption()
-          break
-        }
-        case KEY_CODES.ARROW_RIGHT: {
-          const current = instance.getNode(instance.menu.current)
-          if (current.isBranch && !instance.shouldExpand(current)) {
-            evt.preventDefault()
-            instance.toggleExpanded(current)
-          }
           break
         }
         case KEY_CODES.ARROW_DOWN: {

@@ -1,4 +1,20 @@
 // webpack config
+const crypto = require('crypto');
+
+/**
+ * The MD4 algorithm is not available anymore in Node.js 17+ (because of library SSL 3).
+ * In that case, silently replace MD4 by the MD5 algorithm.
+ */
+try {
+  crypto.createHash('md4');
+} catch (e) {
+  console.warn('Crypto "MD4" is not supported anymore by this Node.js version');
+  const origCreateHash = crypto.createHash;
+  crypto.createHash = (alg, opts) => {
+    return origCreateHash(alg === 'md4' ? 'md5' : alg, opts);
+  };
+}
+
 const path = require('path');
 const WebpackBar = require('webpackbar');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -8,7 +24,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 const { DefinePlugin } = require('webpack');
 const tsNameof = require("ts-nameof");
-
 
 module.exports = (env = {}) => ([
 {
@@ -20,7 +35,7 @@ module.exports = (env = {}) => ([
   },
   output: {
     path: path.resolve(__dirname, "docs"),
-    filename: "[name].min.js",
+    filename: "[name].min.js"
   },
 
   watchOptions: {
